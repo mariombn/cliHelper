@@ -17,8 +17,10 @@ cp config.ini-dist config.ini
 Depois, basta configurar todos os parametros do arquivo `config.ini` de acordo com o seu projeto.
 
 # TODO
-
+- General
+    - Subistituir os echos pelo método `$this->myecho` para evitar problemas de encoding
 - Model
+    - Ajustar os atributos para seguir PSR2 (camelCase)
     - Método Select By Id
     - Método Inserir
     - Método Atualizar

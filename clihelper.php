@@ -12,9 +12,9 @@ try {
     $main = new clihelper($arqumentos);
 } catch (Exception $e) {
     echo PHP_EOL;
-    echo "------------------------------------------------------------------------------------------------------------" . PHP_EOL;
+    echo "--------------------------------------------------------------------------------------------------" . PHP_EOL;
     echo " ERRO! " . $e->getMessage() . PHP_EOL;
-    echo "------------------------------------------------------------------------------------------------------------" . PHP_EOL;
+    echo "--------------------------------------------------------------------------------------------------" . PHP_EOL;
     print_r($e);
 }
 
@@ -141,7 +141,8 @@ class clihelper
     }
 
     /**
-     * Cria uma classe Model basica de acordo com a tabela
+     * Comando makemodel
+     * @throws Exception
      */
     private function makemodel()
     {
@@ -158,17 +159,21 @@ class clihelper
         foreach ($tableDesc as $k => $campo) {
             $fields[$k]['field'] = $campo['Field'];
             $fields[$k]['type'] = $this->typeMapper[explode('(', explode(' ', $campo['Type'])[0])[0]];
+            $fields[$k]['atribute'] = $this->convert2CamelCase($campo['Field']);
         }
+
+        //print_r($fields); exit;
 
         $strClassAtributes = '';
         $strClassListar = '';
+        $strClassCarregarResult = '';
         $strClassInserir = '';
         $strClassAtualizar = '';
         $strClassDeletar = '';
 
         foreach ($fields as $field) {
             $strClassAtributes .= "    /** @var " . $field['type'] . " */" . PHP_EOL;
-            $strClassAtributes .= "    public $" . $field['field'] . ";" . PHP_EOL;
+            $strClassAtributes .= "    public $" . $field['atribute'] . ";" . PHP_EOL;
             $strClassAtributes .= PHP_EOL;
 
             if (end($fields)['field'] == $field['field']) {
@@ -176,6 +181,9 @@ class clihelper
             } else {
                 $strClassListar .= "                    " . $field['field'] . "," . PHP_EOL;
             }
+
+            $strClassCarregarResult .= '        $this->' . $field['atribute'] . ' = $row[\'' . $field['field'] . '\'];' . PHP_EOL;
+
         }
 
         $template = file_get_contents('templates/Model');
@@ -184,6 +192,10 @@ class clihelper
         $template = str_replace('<<SELECT_FIELDS>>', $strClassListar, $template);
         $template = str_replace('<<TABLE_NAME>>', $tablename, $template);
 
+        $template = str_replace('<<PRIMARY_FIELD>>', $fields[0]['field'], $template);
+        $template = str_replace('<<PRIMARY_ATRIBUTE>>', $fields[0]['atribute'], $template);
+        $template = str_replace('<<LOAD_RESULT>>', $strClassCarregarResult, $template);
+
         file_put_contents('exit/' . $tablename . '.php', $template);
 
 
@@ -191,39 +203,29 @@ class clihelper
         $this->start();
     }
 
+    /**
+     * Comando sair
+     */
     private function sair()
     {
         echo PHP_EOL . "Obrigado!";
         exit;
     }
 
+    private function convert2CamelCase($value)
+    {
+        $value[0] = strtolower($value[0]);
+        return $value;
+    }
+
+    /**
+     * Imprime o Logo da Aplicação
+     */
     private function printLogo()
     {
-        echo "" . PHP_EOL;
-        echo "" . PHP_EOL;
-        echo "                    lllllll   iiii  HHHHHHHHH     HHHHHHHHH                   lllllll" . PHP_EOL;
-        echo "                    l:::::l  i::::i H:::::::H     H:::::::H                   l:::::l" . PHP_EOL;
-        echo "                    l:::::l   iiii  H:::::::H     H:::::::H                   l:::::l" . PHP_EOL;
-        echo "                    l:::::l         HH::::::H     H::::::HH                   l:::::l" . PHP_EOL;
-        echo "    cccccccccccccccc l::::l iiiiiii   H:::::H     H:::::H      eeeeeeeeeeee    l::::lppppp   ppppppppp       eeeeeeeeeeee    rrrrr   rrrrrrrrr" . PHP_EOL;
-        echo "  cc:::::::::::::::c l::::l i:::::i   H:::::H     H:::::H    ee::::::::::::ee  l::::lp::::ppp:::::::::p    ee::::::::::::ee  r::::rrr:::::::::r" . PHP_EOL;
-        echo " c:::::::::::::::::c l::::l  i::::i   H::::::HHHHH::::::H   e::::::eeeee:::::eel::::lp:::::::::::::::::p  e::::::eeeee:::::eer:::::::::::::::::r" . PHP_EOL;
-        echo ":::::::cccccc:::::c l::::l  i::::i   H:::::::::::::::::H  e::::::e     e:::::el::::lpp::::::ppppp::::::pe::::::e     e:::::err::::::rrrrr::::::r" . PHP_EOL;
-        echo "::::::c     ccccccc l::::l  i::::i   H:::::::::::::::::H  e:::::::eeeee::::::el::::l p:::::p     p:::::pe:::::::eeeee::::::e r:::::r     r:::::r" . PHP_EOL;
-        echo ":::::c              l::::l  i::::i   H::::::HHHHH::::::H  e:::::::::::::::::e l::::l p:::::p     p:::::pe:::::::::::::::::e  r:::::r     rrrrrrr" . PHP_EOL;
-        echo ":::::c              l::::l  i::::i   H:::::H     H:::::H  e::::::eeeeeeeeeee  l::::l p:::::p     p:::::pe::::::eeeeeeeeeee   r:::::r" . PHP_EOL;
-        echo "::::::c     ccccccc l::::l  i::::i   H:::::H     H:::::H  e:::::::e           l::::l p:::::p    p::::::pe:::::::e            r:::::r" . PHP_EOL;
-        echo ":::::::cccccc:::::cl::::::li::::::iHH::::::H     H::::::HHe::::::::e         l::::::lp:::::ppppp:::::::pe::::::::e           r:::::r" . PHP_EOL;
-        echo " c:::::::::::::::::cl::::::li::::::iH:::::::H     H:::::::H e::::::::eeeeeeee l::::::lp::::::::::::::::p  e::::::::eeeeeeee   r:::::r" . PHP_EOL;
-        echo "  cc:::::::::::::::cl::::::li::::::iH:::::::H     H:::::::H  ee:::::::::::::e l::::::lp::::::::::::::pp    ee:::::::::::::e   r:::::r" . PHP_EOL;
-        echo "    cccccccccccccccclllllllliiiiiiiiHHHHHHHHH     HHHHHHHHH    eeeeeeeeeeeeee llllllllp::::::pppppppp        eeeeeeeeeeeeee   rrrrrrr" . PHP_EOL;
-        echo "                                                                                      p:::::p" . PHP_EOL;
-        echo "                                                                                      p:::::p" . PHP_EOL;
-        echo "                                                                                     p:::::::p" . PHP_EOL;
-        echo "                                                                                     p:::::::p" . PHP_EOL;
-        echo "                                                                                     p:::::::p" . PHP_EOL;
-        echo "                                                                                     ppppppppp" . PHP_EOL;
-        echo "                                                                                                                                     ver. " . self::VERSAO . PHP_EOL;
+        $logo = file_get_contents('templates/logo');
+        echo $logo;
+        $this->myecho("Versão " . self::VERSAO);
     }
 
     /**
@@ -252,6 +254,11 @@ class clihelper
         return $retorno;
     }
 
+    /**
+     * Imprime na tela convertendo a mensagem para UTF8
+     * @param $buffer
+     * @param bool $newline
+     */
     private function myecho($buffer, $newline = false)
     {
         echo utf8_encode($buffer);

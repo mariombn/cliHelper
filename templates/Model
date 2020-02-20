@@ -3,9 +3,38 @@
 class <<CLASSNAME>> extends Model
 {
 <<ATRIUTES>>
-
     public function __construct(){}
 
+    /**
+     * Carrega a Entidade
+     * @return bool
+     */
+    public function carregar()
+    {
+        $sql = "SELECT
+        <<SELECT_FIELDS>>
+                FROM <<TABLE_NAME>>
+                WHERE <<PRIMARY_FIELD>> = {$this-><<PRIMARY_ATRIBUTE>>}
+                ";
+
+        $resultado = $this->getResult($sql);
+
+        if (count($resultado) == 0) {
+            return false;
+        }
+        $row = $resultado[0];
+
+<<LOAD_RESULT>>
+
+        return true;
+    }
+
+    /**
+     * @param null $start
+     * @param null $limit
+     * @param null $filters
+     * @return array
+     */
     public function listar($start = null, $limit = null, $filters = null)
     {
         $sql = "SELECT
