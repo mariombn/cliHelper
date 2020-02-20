@@ -1,0 +1,52 @@
+<?php
+
+class <<CLASSNAME>> extends Model
+{
+<<ATRIUTES>>
+
+    public function __construct(){}
+
+    public function listar($start = null, $limit = null, $filters = null)
+    {
+        $sql = "SELECT
+<<SELECT_FIELDS>>
+                FROM <<TABLE_NAME>>
+                WHERE 1=1
+                ";
+
+        if (is_array($filters) && count($filters) > 0) {
+            foreach($filters as $filter) {
+                $sql .= " " . $filter . " ";
+            }
+        }
+
+        if (!is_null($start) || !is_null($limit)) {
+            $start = NumberHelper::sanitizePositiveInteger($start);
+            $limit = NumberHelper::sanitizePositiveInteger($limit);
+
+            $sql .= " LIMIT ";
+
+            if ($start != '') {
+                $sql .= $start;
+            }
+
+            if ($start != '' && $limit != '') {
+                $sql .= " , ";
+            }
+
+            if ($limit != '') {
+                $sql .= $limit;
+            }
+        }
+
+        $resultado = $this->getResult($sql);
+        $numberOfRows = $this->getResult("SELECT FOUND_ROWS() as ROWS");
+        $numberOfRows = $numberOfRows[0]->ROWS;
+
+        return array(
+            'success' => true,
+            'data' => $resultado ?: array(),
+            'rownums' => $numberOfRows,
+        );
+    }
+}

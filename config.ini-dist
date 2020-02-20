@@ -1,0 +1,17 @@
+[Owner Settings]
+
+CLASS_PROJECT_NAME=Project Name
+CLASS_OWNER_NAME=Your Full Name
+CLASS_OWNER_EMAIL=youtmail@mail.com
+
+[Database Settings]
+
+DB_HOSTNAME=127.0.0.1
+DB_HOSTPORT=3306
+DB_DATABASE=database
+DB_USERNAME=username
+DB_PASSWORD=password
+
+[Path Settings]
+
+PROJECT_HOME=/var/www/html/
