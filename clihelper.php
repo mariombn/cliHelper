@@ -167,9 +167,9 @@ class clihelper
         $strClassAtributes = '';
         $strClassListar = '';
         $strClassCarregarResult = '';
-        $strClassInserir = '';
-        $strClassAtualizar = '';
-        $strClassDeletar = '';
+        $strClassInserir = ''; //TODO: Implementar
+        $strClassAtualizar = ''; //TODO: Implementar
+        $strClassDeletar = ''; //TODO: Implementar
 
         foreach ($fields as $field) {
             $strClassAtributes .= "    /** @var " . $field['type'] . " */" . PHP_EOL;
