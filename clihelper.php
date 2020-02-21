@@ -9,7 +9,7 @@
 
 try {
     $arqumentos = (count($argv) > 1) ? $argv : false;
-    $main = new clihelper($arqumentos);
+    $main = new Clihelper($arqumentos);
 } catch (Exception $e) {
     echo PHP_EOL;
     echo "--------------------------------------------------------------------------------------------------" . PHP_EOL;
@@ -18,7 +18,7 @@ try {
     print_r($e);
 }
 
-class clihelper
+class Clihelper
 {
     const VERSAO = '1.0';
 
