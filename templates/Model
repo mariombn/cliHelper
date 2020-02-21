@@ -12,7 +12,7 @@ class <<CLASSNAME>> extends Model
     public function carregar()
     {
         $sql = "SELECT
-        <<SELECT_FIELDS>>
+<<SELECT_FIELDS>>
                 FROM <<TABLE_NAME>>
                 WHERE <<PRIMARY_FIELD>> = {$this-><<PRIMARY_ATRIBUTE>>}
                 ";

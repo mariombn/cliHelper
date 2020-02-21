@@ -20,6 +20,7 @@ Depois, basta configurar todos os parametros do arquivo `config.ini` de acordo c
 - General
     - Subistituir os echos pelo método `$this->myecho` para evitar problemas de encoding
 - Model
-    - Ajuste para converter Underline em note de tabela para camelCase
+    - Complementar PHPDocs de acordo com o arquivo de configuração
+    - Criar o método que vai enviar o arquivo gerado para a pasta do projeto
 - Controller
     - Tudo

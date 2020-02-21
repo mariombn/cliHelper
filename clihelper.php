@@ -148,6 +148,8 @@ class clihelper
     {
         $this->myecho("Digite o nome da tabela que você quer usar em seu Model: ");
         $tablename = readline();
+        $className = $this->dashesToCamelCase($tablename);
+
         if (!in_array($tablename, $this->tables)) {
             throw new Exception("Tabela não encontrada");
         }
@@ -162,17 +164,13 @@ class clihelper
             $fields[$k]['atribute'] = $this->convert2CamelCase($campo['Field']);
         }
 
-        //print_r($fields); exit;
-
         $strClassAtributes = '';
         $strClassListar = '';
         $strClassCarregarResult = '';
-        $strClassInserir = ''; //TODO: Implementar
-        $strClassAtualizar = ''; //TODO: Implementar
-        $strClassDeletar = ''; //TODO: Implementar
+        $strClassInserir = '';
+        $strClassAtualizar = '';
 
         foreach ($fields as $field) {
-
             if (end($fields)['field'] == $field['field']) {
                 $gomma = '';
             } else {
@@ -197,12 +195,10 @@ class clihelper
             } else {
                 $strClassAtualizar .= '                    ' . $field['field'] . ' = \'{$this->' . $field['atribute'] . '}\'' . $gomma . PHP_EOL;
             }
-
-
         }
 
         $template = file_get_contents('templates/Model');
-        $template = str_replace('<<CLASSNAME>>', $tablename, $template);
+        $template = str_replace('<<CLASSNAME>>', $className, $template);
         $template = str_replace('<<ATRIUTES>>', $strClassAtributes, $template);
         $template = str_replace('<<SELECT_FIELDS>>', $strClassListar, $template);
         $template = str_replace('<<TABLE_NAME>>', $tablename, $template);
@@ -213,7 +209,7 @@ class clihelper
         $template = str_replace('<<INSERT_FIELDS>>', $strClassInserir, $template);
         $template = str_replace('<<UPDATE_FIELDS>>', $strClassAtualizar, $template);
 
-        file_put_contents('exit/' . $tablename . '.php', $template);
+        file_put_contents('exit/' . $className . '.php', $template);
 
 
         exit;
@@ -229,10 +225,26 @@ class clihelper
         exit;
     }
 
+    /**
+     * Converte UpperCamelCase para camelCase
+     * @param $value
+     * @return mixed
+     */
     private function convert2CamelCase($value)
     {
         $value[0] = strtolower($value[0]);
         return $value;
+    }
+
+    /**
+     * Converte o padrão DB para camelCase
+     * @param $string
+     * @return string|string[]
+     */
+    private function dashesToCamelCase($string)
+    {
+        $str = str_replace('_', '', ucwords($string, '_'));
+        return $str;
     }
 
     /**
