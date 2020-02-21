@@ -172,17 +172,32 @@ class clihelper
         $strClassDeletar = ''; //TODO: Implementar
 
         foreach ($fields as $field) {
+
+            if (end($fields)['field'] == $field['field']) {
+                $gomma = '';
+            } else {
+                $gomma = ',';
+            }
+
             $strClassAtributes .= "    /** @var " . $field['type'] . " */" . PHP_EOL;
             $strClassAtributes .= "    public $" . $field['atribute'] . ";" . PHP_EOL;
             $strClassAtributes .= PHP_EOL;
-
-            if (end($fields)['field'] == $field['field']) {
-                $strClassListar .= "                    " . $field['field'];
-            } else {
-                $strClassListar .= "                    " . $field['field'] . "," . PHP_EOL;
-            }
+            $strClassListar .= "                    " . $field['field'] . $gomma . PHP_EOL;
 
             $strClassCarregarResult .= '        $this->' . $field['atribute'] . ' = $row[\'' . $field['field'] . '\'];' . PHP_EOL;
+
+            if ($field['type'] == 'int') {
+                $strClassInserir .= '                    {$this->' . $field['atribute'] . '}' . $gomma . PHP_EOL;
+            } else {
+                $strClassInserir .= '                    \'{$this->' . $field['atribute'] . '}\'' . $gomma . PHP_EOL;
+            }
+
+            if ($field['type'] == 'int') {
+                $strClassAtualizar .= '                    ' . $field['field'] . ' = {$this->' . $field['atribute'] . '}' . $gomma . PHP_EOL;
+            } else {
+                $strClassAtualizar .= '                    ' . $field['field'] . ' = \'{$this->' . $field['atribute'] . '}\'' . $gomma . PHP_EOL;
+            }
+
 
         }
 
@@ -195,6 +210,8 @@ class clihelper
         $template = str_replace('<<PRIMARY_FIELD>>', $fields[0]['field'], $template);
         $template = str_replace('<<PRIMARY_ATRIBUTE>>', $fields[0]['atribute'], $template);
         $template = str_replace('<<LOAD_RESULT>>', $strClassCarregarResult, $template);
+        $template = str_replace('<<INSERT_FIELDS>>', $strClassInserir, $template);
+        $template = str_replace('<<UPDATE_FIELDS>>', $strClassAtualizar, $template);
 
         file_put_contents('exit/' . $tablename . '.php', $template);
 

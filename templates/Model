@@ -25,7 +25,6 @@ class <<CLASSNAME>> extends Model
         $row = $resultado[0];
 
 <<LOAD_RESULT>>
-
         return true;
     }
 
@@ -77,5 +76,46 @@ class <<CLASSNAME>> extends Model
             'data' => $resultado ?: array(),
             'rownums' => $numberOfRows,
         );
+    }
+
+    /**
+     * Adiciona um registro no Banco
+     * @return bool
+     */
+    public function inserir()
+    {
+        $sql = "INSERT INTO <<TABLE_NAME>> (
+<<SELECT_FIELDS>>
+                ) VALUES (
+<<INSERT_FIELDS>>";
+        $erro = null;
+        $insertedId = $this->insert($sql, $erro);
+        $this-><<PRIMARY_ATRIBUTE>> = $insertedId;
+        if ($erro) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function atualizar()
+    {
+        $sql = "UPDATE <<TABLE_NAME>> SET
+<<UPDATE_FIELDS>>
+        WHERE <<PRIMARY_FIELD>> = {$this-><<PRIMARY_ATRIBUTE>>}
+                        ";
+        return $this->execute($sql);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function deletar()
+    {
+        $sql = "DELETE FROM <<TABLE_NAME>>
+                WHERE <<PRIMARY_FIELD>> = {$this-><<PRIMARY_ATRIBUTE>>}";
+        return $this->execute($sql);
     }
 }

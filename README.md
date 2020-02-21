@@ -20,9 +20,6 @@ Depois, basta configurar todos os parametros do arquivo `config.ini` de acordo c
 - General
     - Subistituir os echos pelo método `$this->myecho` para evitar problemas de encoding
 - Model
-    - Ajustar os atributos para seguir PSR2 (camelCase)
-    - Método Select By Id
-    - Método Inserir
-    - Método Atualizar
-    - Método Excluir
+    - Ajuste para converter Underline em note de tabela para camelCase
 - Controller
+    - Tudo
