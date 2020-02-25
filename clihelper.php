@@ -211,13 +211,23 @@ class Clihelper
 
         file_put_contents('exit/' . $className . '.php', $template);
 
+        echo PHP_EOL;
 
-        exit;
-        $this->start();
+        $this->myecho('Arquivo gerado com sucesso!', true);
+
+        $modelPath = '/src/app/models/';
+
+        system('cp exit/' . $className . '.php ' . $this->settings['PROJECT_HOME'] . $modelPath . $className . '.php');
+
+        $this->myecho("Arquivo copiado para: " . $this->settings['PROJECT_HOME'] . $modelPath . $className . '.php');
+
+        echo PHP_EOL;
+
+        $this->menu();
     }
 
     /**
-     * Comando sair
+     * Comando sair 
      */
     private function sair()
     {
