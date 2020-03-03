@@ -3,5 +3,14 @@
     "type": "project",
     "license": "GNU GPT",
     "minimum-stability": "dev",
-    "require": {}
+    "autoload": {
+        "psr-4": {
+            "Cli\\Helper\\": "src/"
+        }
+    },
+    "require": {
+        "php": ">=7.0",
+        "ext-mysqli": "*",
+        "ext-readline": "*"
+    }
 }
