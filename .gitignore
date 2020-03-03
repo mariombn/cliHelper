@@ -5,3 +5,5 @@ exit/*
 
 # exception to the rule
 !exit/.gitkeep
+vendor/
+.idea/

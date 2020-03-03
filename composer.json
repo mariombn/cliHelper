@@ -1,0 +1,7 @@
+{
+    "name": "mariombn/clihelper",
+    "type": "project",
+    "license": "GNU GPT",
+    "minimum-stability": "dev",
+    "require": {}
+}
