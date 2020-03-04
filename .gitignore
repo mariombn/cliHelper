@@ -1,7 +1,7 @@
 config.ini
-
 # exclude everything
 exit/*
-
 # exception to the rule
 !exit/.gitkeep
+vendor/
+.idea/

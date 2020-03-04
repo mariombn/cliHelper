@@ -1,0 +1,16 @@
+{
+    "name": "mariombn/clihelper",
+    "type": "project",
+    "license": "GNU GPT",
+    "minimum-stability": "dev",
+    "autoload": {
+        "psr-4": {
+            "Cli\\Helper\\": "src/"
+        }
+    },
+    "require": {
+        "php": ">=7.0",
+        "ext-mysqli": "*",
+        "ext-readline": "*"
+    }
+}

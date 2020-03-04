@@ -1,0 +1,121 @@
+<?php
+
+class <<CLASSNAME>> extends Model
+{
+<<ATRIUTES>>
+    public function __construct(){}
+
+    /**
+     * Carrega a Entidade
+     * @return bool
+     */
+    public function carregar()
+    {
+        $sql = "SELECT
+<<SELECT_FIELDS>>
+                FROM <<TABLE_NAME>>
+                WHERE <<PRIMARY_FIELD>> = {$this-><<PRIMARY_ATRIBUTE>>}
+                ";
+
+        $resultado = $this->getResult($sql);
+
+        if (count($resultado) == 0) {
+            return false;
+        }
+        $row = $resultado[0];
+
+<<LOAD_RESULT>>
+        return true;
+    }
+
+    /**
+     * @param null $start
+     * @param null $limit
+     * @param null $filters
+     * @return array
+     */
+    public function listar($start = null, $limit = null, $filters = null)
+    {
+        $sql = "SELECT
+<<SELECT_FIELDS>>
+                FROM <<TABLE_NAME>>
+                WHERE 1=1
+                ";
+
+        if (is_array($filters) && count($filters) > 0) {
+            foreach($filters as $filter) {
+                $sql .= " " . $filter . " ";
+            }
+        }
+
+        if (!is_null($start) || !is_null($limit)) {
+            $start = NumberHelper::sanitizePositiveInteger($start);
+            $limit = NumberHelper::sanitizePositiveInteger($limit);
+
+            $sql .= " LIMIT ";
+
+            if ($start != '') {
+                $sql .= $start;
+            }
+
+            if ($start != '' && $limit != '') {
+                $sql .= " , ";
+            }
+
+            if ($limit != '') {
+                $sql .= $limit;
+            }
+        }
+
+        $resultado = $this->getResult($sql);
+        $numberOfRows = $this->getResult("SELECT FOUND_ROWS() as ROWS");
+        $numberOfRows = $numberOfRows[0]->ROWS;
+
+        return array(
+            'success' => true,
+            'data' => $resultado ?: array(),
+            'rownums' => $numberOfRows,
+        );
+    }
+
+    /**
+     * Adiciona um registro no Banco
+     * @return bool
+     */
+    public function inserir()
+    {
+        $sql = "INSERT INTO <<TABLE_NAME>> (
+<<SELECT_FIELDS>>
+                ) VALUES (
+<<INSERT_FIELDS>>";
+        $erro = null;
+        $insertedId = $this->insert($sql, $erro);
+        $this-><<PRIMARY_ATRIBUTE>> = $insertedId;
+        if ($erro) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function atualizar()
+    {
+        $sql = "UPDATE <<TABLE_NAME>> SET
+<<UPDATE_FIELDS>>
+        WHERE <<PRIMARY_FIELD>> = {$this-><<PRIMARY_ATRIBUTE>>}
+                        ";
+        return $this->execute($sql);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function deletar()
+    {
+        $sql = "DELETE FROM <<TABLE_NAME>>
+                WHERE <<PRIMARY_FIELD>> = {$this-><<PRIMARY_ATRIBUTE>>}";
+        return $this->execute($sql);
+    }
+}
